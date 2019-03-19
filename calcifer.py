@@ -14,10 +14,7 @@ from discord.ext import commands
 with open("config.json","r") as h:
     config = json.load(h)
 
-prefix = config['prefix']
-extensions = ['xkcd', 'econ']
-#
-client = Bot(command_prefix=prefix)
+client = Bot(command_prefix=config['prefix'])
 client.remove_command('help')
 #
 #####################
@@ -35,33 +32,6 @@ async def on_ready():
    await client.change_presence(game=Game(name="In The Moving Castle"))
    print("Logged in as " + client.user.name)
 
-##############
-# C O G  / S #
-##############
-#This imports the cogs listed in extensions
-if __name__ == "__main__":
-    for extensions in extensions:
-        try:
-            client.load_extension(extensions)
-        except Exception as e:
-            exc = '{}: {}'.format(type(e).__name__, e)
-            print('Failed to load extension {}\n{}'.format(extensions, exc))
-#This manually lets you load a/the cog
-@client.command()
-async def load(extension):
-    try:
-        client.load_extension(extension)
-        print("[*] The Cog Was Successfully Loaded!!".format(extension))
-    except Exception as error:
-        print("{!} The Cog Could Not Be Loaded. But my Glock Is".format(extension, error))
-#This manually lets you unload the cog
-@client.command()
-async def unload(extension):
-    try:
-        client.unload_extension(extension)
-        print("[*] The Cog Was Successfully Unloaded!!".format(extension))
-    except Exception as error:
-        print("{!} The Cog Could Not Be Unloaded. And neither can my Glock Is".format(extension, error))
 ##################################################
 # C O M M A N D  T A B L E  O F  C O N T E N T S #
 ##################################################
@@ -79,8 +49,8 @@ async def square(number):
     await client.say(str(number) + " squared is " + str(squared_value))
 ###T E S T###
 @client.command(pass_context=True)
-async def test(context):
-    await client.say("[+] Success!! All Systems Are Up ")
+async def pingext):
+    await client.say("[+] Ping!!! All systems are up")
 ############################
 # U S E R - R E S P O N S E#
 ############################
@@ -94,12 +64,7 @@ async def goodnight(context):
 #
 @client.command(pass_context=True)
 async def gowhere(context):
-    ua = "𝑷𝑳𝑼𝑺 𝑼𝑳𝑻𝑹𝑨!!!!!"
-    await client.say(context.message.author.mention+"You must go......"+ua)
-#
-@client.command(pass_context=True)
-async def prv(context):
-    await client.send_message(context.message.author, "hey! did this work?")
+    await client.say(context.message.author.mention+"You must go......𝑷𝑳𝑼𝑺 𝑼𝑳𝑻𝑹𝑨!!!!!")
 #############
 # F U N N Y #
 #############
@@ -359,11 +324,8 @@ async def help(ctx):
         colour = discord.Colour.teal()
     )
     em.set_author(name="Help")
-    em.add_field(name="./load", value="Loads cogs into bot", inline=False)
-    em.add_field(name="./unload", value="Unloads cogs from bot", inline=False)
-    em.add_field(name="./8ball", value="Answers from beyond", inline=False)
     em.add_field(name="./square", value="Squares a number", inline=False)
-    em.add_field(name="./test", value="This command is to test whether the bot is active or not", inline=False)
+    em.add_field(name="./ping", value="This command is to test whether the bot is active or not", inline=False)
     em.add_field(name="./iwanttobe", value="What do you want be...:thinking:", inline=False)
     em.add_field(name="./goodnight", value="-_-", inline=False)
     em.add_field(name="./gowhere", value="WHERE DO WE GO?!?!?!?", inline=False)
@@ -386,13 +348,7 @@ async def help(ctx):
     em.set_footer(text="For more commands type `./hlp2`")
     em.set_footer(text="For nsfw commands type `./nsfw`")
     await client.send_message(ctx.message.author, embed=em)
-
-#This command saves people from the embarressment of having typing the wrong command
-@client.command(pass_context=True)
-async def help(ctx):
-    await client.delete_message(ctx.message)
-    await client.send_message(ctx.message.author, "Hey i didnt want to humiliate you in front of your friends (*whispers* which is why I took the liberty of deleting your message). Why? because the help command is `hlp` you silly goose now go back in that server, type the correct help command and act like nothing ever happened :smile:")
-
+    
 @client.command(pass_context=True)
 async def adv(ctx):
   vc = discord.Embed(
@@ -429,7 +385,7 @@ async def suggestion(ctx, *args):
 
 #Continuation of ./hlp
 @client.command(pass_context=True)
-async def help(ctx):
+async def help2(ctx):
     em2 = discord.Embed(
         colour=discord.Colour.teal()
     )
