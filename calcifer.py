@@ -1,8 +1,8 @@
 #here lies the edited version of Ein's Code now called Calcifer
-
-#remember : await client.say(ctx.message.author,"lapus lazuli"+link) 
+#Calcifer is suppose to be a more advanced version of Ein
 #Use the above code format to de-clutter Calcifers code and dont print things line by line
 import random
+import time
 import json
 import os
 import aiohttp
@@ -14,53 +14,34 @@ from discord.ext import commands
 with open("config.json","r") as h:
     config = json.load(h)
 
-client = Bot(command_prefix=config['prefix'])
-client.remove_command('help')
 #
-#####################
-# L I S T E N E R S #
-#####################
-
-@client.event
-async def on_ready():
-   print(
-            "\n +////////////////////////////////////////////+"
-            "\n |        Calcifer - Open-Source Discord Bot  |"
-            "\n | (c) 2019 Finn Tachyen (@rootmeskids)       |"
-            "\n +////////////////////////////////////////////+\n"
-         )
-   await client.change_presence(game=Game(name="In The Moving Castle"))
-   print("Logged in as " + client.user.name)
-
+client = Bot(command_prefix=commands.when_mentioned_or(config['prefix']))
+client.remove_command('help')
 ##################################################
 # C O M M A N D  T A B L E  O F  C O N T E N T S #
 ##################################################
 #8ball  #User-Response  #Link-Generators  #Help
 #Square #Funny          #NSFW
-#Test   #Misc           #Github
+#Ping   #Misc           #Github
 
-
-#### 8 B A L L ####
 
 ####SQUARE(math)####
 @client.command()
 async def square(number):
     squared_value = int(number) * int(number)
     await client.say(str(number) + " squared is " + str(squared_value))
-###T E S T###
+###P I N G###
 @client.command(pass_context=True)
-async def pingext):
-    await client.say("[+] Ping!!! All systems are up")
+async def marco(ctx):
+    t = await client.say('Polo!')
+    ms = (t.timestamp-ctx.message.timestamp).total_seconds() * 1000
+    await client.edit_message(t, new_content='Polo! It took me {}ms to recieve that but other than that it seems the castle is up and running :smile: :fire:'.format(int(ms)))
 ############################
 # U S E R - R E S P O N S E#
 ############################
 @client.command(pass_context=True)
 async def iwanttobe(context):
-    await client.say(context.author.message.mention+" Wants to be the very best like no one ever was")
-#
-@client.command(pass_context=True)
-async def goodnight(context):
-    await client.say("Goodnight, " + context.message.author.mention+" Sleep Tight :smile:")
+    await client.say(context.message.author.mention+" Wants to be the very best like no one ever was")
 #
 @client.command(pass_context=True)
 async def gowhere(context):
@@ -68,25 +49,6 @@ async def gowhere(context):
 #############
 # F U N N Y #
 #############
-#These commands range from Memes to Games.
-#Blue Eyes Dragon Summoner
-@client.command(pass_context=True)
-async def bewd2(context):
-    await client.say(context.message.author.mention+" Has 2 Blue Eyes White Dragons")
-
-@client.command(pass_context=True)
-async def bewd3(ctx):
-    await client.say(ctx.message.author.mention+" Has 3 Blue Eyes White Dragons")
-
-@client.command(pass_context=True)
-async def beud(ctx):
-    link = "pass"
-    await client.say(ctx.message.author.mention+"Summons Blue Eyes Ultimate Dragon!!!!"+link)
-
-@client.command(pass_context=True)
-async def blueeyes(context):
-    await client.say(context.message.author.mention+" Has 1 Blue Eyes White Dragon")
-#
 @client.command(pass_context=True)
 async def havenofear(ctx):
     am = discord.Embed(
@@ -102,26 +64,6 @@ async def zr(ctx):
     )
     br.set_image(url="https://i.postimg.cc/BvvcrMRN/barrell.gif")
     await client.say(embed=br)
-#
-@client.command(pass_context=True)
-async def testi(context):
-    await client.say(context.message + " Has 3 Blue Eyes White Dragons")
-#
-@client.command(pass_context=True)
-async def faq(ctx):
-    emb = discord.Embed(
-        title='Calcifer',
-        description=' ',
-        color=discord.Colour.lighter_grey()
-    )
-    emb.set_footer(text='Created with Love by Howl. Follow me on twitter @rootmeskids')
-    emb.set_image(url="https://ih0.redbubble.net/image.247913634.3151/pp,550x550.u2.jpg")
-    emb.set_thumbnail(url="https://cdn.discordapp.com/avatars/488456606686904331/21d10d4d70529947b54a175b62773567.png?size=128")
-    emb.set_author(name="Howl", icon_url="https://cdn.discordapp.com/avatars/222654045469409280/f0917f18c6a6350b6cb1dea482a25596.png?size=2048")
-    emb.add_field(name=' ', value='Calcifer is an easy to run,constantly evolving,Open-Source Discord Bot. Over the course of 4 months, 23 bowls of Beef and Peppers(without the beef), Howl Has been working his hardest on making Ein one of THE top premiere bots available.', inline=False)
-    emb.add_field(name='Add Calcifer to your castle', value="https://discordapp.com/api/oauth2/authorize?client_id=488456606686904331&permissions=0&redirect_uri=http%3A%2F%2Fwww.google.com&scope=bot")
-    emb.add_field(name="Calcifers Flame", value="https://github.com/rootmeskids/ponyo", inline=False)
-    await client.send_message(ctx.message.author, embed=emb)
 ###########
 # M I S C #
 ###########
@@ -184,14 +126,6 @@ async def cgl(ctx, *args):
         await client.say(embed=Embed(description="**[Craigslist](%s)**" % url, color=Color.dark_magenta()))
     await client.delete_message(ctx.message)
 
-#This command searches the PyPi line for Python modules
-@client.command(pass_context=True, aliases=['pysearch'])
-async def pypi(ctx, *args):
-    if args:
-        url = "https://pypi.org/search/?q=" + "+".join(args)
-        await client.say(embed=Embed(description="**[PyPi](%s)**" % url, color=Color.gold()))
-    await client.delete_message(ctx.message)
-
 #This command searches for a term using the Google search engine
 @client.command(pass_context=True, aliases=['alphabet'])
 async def gl(ctx, *args):
@@ -234,6 +168,14 @@ async def twt(ctx, *args):
     if args:
         url = "https://www.twitter.com/" + "+".join(args)
         await client.say(embed=Embed(description="**[Youtube Search](%s)**" % url, color=Color.gold()))
+    await client.delete_message(ctx.message)
+
+#Searches Google Maps
+@client.command(pass_context=True, aliases=[''])
+async def locate(ctx, *args):
+    if args:
+        url = "https://maps.google.com/?q=" + "+".join(args)
+        await client.say(embed=Embed(description="**[Found It!!](%s)**" % url, color=Color.gold()))
     await client.delete_message(ctx.message)
 
 #This command searches for a person on Facebook
@@ -295,8 +237,8 @@ async def githlp(ctx):
     gt = discord.Embed(
         colour = discord.Colour.teal()
     )
-    gt.add_field(name="./git", value="This command is to link to a specific account or repository.  EX: `./git rootmeskids ponyo` or `./git rootmeskids`", inline=False)
-    gt.add_field(name="./gitr", value="This command links to the raw version of a file within a repository. EX: `./gotr rootmeskids ponyo master p.py` or ` aikaterna Marry-Cog master marry marry.py`", inline=False)
+    gt.add_field(name="git", value="This command is to link to a specific account or repository.  EX: `git rootmeskids ponyo` or `git rootmeskids`", inline=False)
+    gt.add_field(name="gitr", value="This command links to the raw version of a file within a repository. EX: `gitr rootmeskids ponyo master p.py` or ` aikaterna Marry-Cog master marry marry.py`", inline=False)
     await client.send_message(ctx.message.author, embed=gt)
 
 #This command generates a link. This command is for users to quickly and easily link to their github pages
@@ -324,38 +266,26 @@ async def help(ctx):
         colour = discord.Colour.teal()
     )
     em.set_author(name="Help")
-    em.add_field(name="./square", value="Squares a number", inline=False)
-    em.add_field(name="./ping", value="This command is to test whether the bot is active or not", inline=False)
-    em.add_field(name="./iwanttobe", value="What do you want be...:thinking:", inline=False)
-    em.add_field(name="./goodnight", value="-_-", inline=False)
-    em.add_field(name="./gowhere", value="WHERE DO WE GO?!?!?!?", inline=False)
-    em.add_field(name="./prv", value="A private message testing command", inline=False)
-    em.add_field(name="./bewd2", value="2 Blue Eyes White Dragon", inline=False)
-    em.add_field(name="./bewd3", value="3 Blue Eyes White Dragon", inline=False)
-    em.add_field(name="./beud", value="1 Blue Eyes Ultimate Dragon", inline=False)
-    em.add_field(name="./blueeyes", value="1 Blue Eyes White Dragon", inline=False)
-    em.add_field(name="./havenofear", value="WHO CAN IT BE?!?!?!?!", inline=False)
-    em.add_field(name="./testi", value="???", inline=False)
-    em.add_field(name="./faq", value="About Ein", inline=False)
-    em.add_field(name="./embd", value="Embeds your text", inline=False)
-    em.add_field(name="./lmgtfy", value="Generates a lmgtfy link", inline=False)
-    em.add_field(name="./srchip", value="Searches for an IP address", inline=False)
-    em.add_field(name="./cgl", value="Searches Craigslist", inline=False)
-    em.add_field(name="./pypi", value="Searches the PyPi for module", inline=False)
-    em.add_field(name="./gl", value="Searches using the Google search engine", inline=False)
-    em.add_field(name="./yt", value="Searches YouTube", inline=False)
-    em.add_field(name="./ud", value="Searches UrbanDictionary", inline=False)
-    em.set_footer(text="For more commands type `./hlp2`")
-    em.set_footer(text="For nsfw commands type `./nsfw`")
-    await client.send_message(ctx.message.author, embed=em)
-    
+    em.add_field(name="square", value="Squares a number", inline=False)
+    em.add_field(name="marco", value="Polo!!!", inline=False)
+    em.add_field(name="iwanttobe", value="What do you want be...:thinking:", inline=False)
+    em.add_field(name="gowhere", value="WHERE DO WE GO?!?!?!?", inline=False)
+    em.add_field(name="havenofear", value="WHO CAN IT BE?!?!?!?!", inline=False)
+    em.add_field(name="embd", value="Embeds your text", inline=False)
+    em.add_field(name="lmgtfy", value="Generates a lmgtfy link", inline=False)
+    em.add_field(name="srchip", value="Searches for an IP address", inline=False)
+    em.add_field(name="cgl", value="Searches Craigslist", inline=False)
+    em.add_field(name="gl", value="Searches using the Google search engine", inline=False)
+    em.add_field(name="locate", value="Creates Link to map of specified location ")
+    em.add_field(name="yt", value="Searches YouTube", inline=False)
+    em.add_field(name="ud", value="Searches UrbanDictionary", inline=False)
+    em.set_footer(text="For more commands type `help2` and for nsfw commands type `nsfw`")
+    await client.say(ctx.message.author, embed=em)
+
+
 @client.command(pass_context=True)
 async def adv(ctx):
-  vc = discord.Embed(
-    colour=discord.Colour.dark_green()
-  )
-  vice = config['advice']
-  await client.say(random.choice(vice), embed=vc)
+  await client.say(random.choice(tuple(config['advice'])))
   await client.delete_message(ctx.message)
 
 
@@ -366,11 +296,10 @@ async def nsfw(ctx):
         colour=discord.Colour.teal()
     )
     ns.set_author(name="NSFW Commands")
-    ns.add_field(name="./ph", value="Search PornHub", inline=False)
-    ns.add_field(name="./yp", value="Search YouPorn", inline=False)
-    ns.add_field(name="./hh", value="Search HentaiHaven", inline=False)
-    ns.add_field(name="./xnx", value="Search XNXX", inline=False)
-    ns.add_field(name="./fq", value="Search Fuq", inline=False)
+    ns.add_field(name="ph", value="Search PornHub", inline=False)
+    ns.add_field(name="yp", value="Search YouPorn", inline=False)
+    ns.add_field(name="xnx", value="Search XNXX", inline=False)
+    ns.add_field(name="fq", value="Search Fuq", inline=False)
     await client.send_message(ctx.message.author, embed=ns)
 
 #Users Can Leave their suggestions to me
@@ -390,72 +319,44 @@ async def help2(ctx):
         colour=discord.Colour.teal()
     )
     em2.set_author(name="Help continued...")
-    em2.add_field(name="./ddg", value="Searches using the DuckDuckGo search engine", inline=False)
-    em2.add_field(name="./twt", value="Links to specified twitter account", inline=False)
-    em2.add_field(name="./fb", value="Searches for a person on Facebook", inline=False)
-    em2.add_field(name="./githlp", value="Displays Help Menu for Github Commands", inline=False)
-    em2.add_field(name="./git", value="Refer to `./githlp`", inline=False)
-    em2.add_field(name="./gitr", value="Refer to `./githlp`", inline=False)
-    em2.add_field(name="./bitcoin", value="Displays the Current worth of BTC in USD", inline=False)
-    em2.add_field(name="./sugg", value="Send Your Suggestions to <@222654045469409280>", inline=False)
-    em2.add_field(name="./caes", value="Generates a random cyberpunk ａｅｓｔｈｅｔｉｃ image", inline=False)
-    em2.add_field(name="./yums", value="Generates a random ａｅｓｔｈｅｔｉｃ food image", inline=False)
-    em2.add_field(name="./inv", value="Invite Link For Ein", inline=False)
-    em2.add_field(name="./marry", value="marry your lover", inline=False)
-    em2.add_field(name="./kill", value="kill someone", inline=False)
-    em2.add_field(name="./punch", value="punch someone", inline=False)
-    em2.add_field(name="./kiss", value="Kiss your lover", inline=False)
-    em2.add_field(name="./fuckoff", value="Tell Someone to fuck off", inline=False)
-    em2.add_field(name="./fuck", value=":smirk:", inline=False)
-    em.add_field(name="./adv", value="Gives Advice", inline=False)
-    await client.send_message(ctx.message.author, embed=em2)
-#########################################
-#Secret Commands
-#########################################
-@client.command(pass_context=True)
-async def off(ctx):
-    """Shut the bot down."""
-    if ctx.message.author == config['admin']:
-        await client.say("Shutting down...\n\U0001f44b")
-        await client.logout()
-    else:
-        await client.say("Youre Not <@222654045469409280>")
-#################
-# T E S T I N G #
-#################
-
+    em2.add_field(name="ddg", value="Searches using the DuckDuckGo search engine", inline=False)
+    em2.add_field(name="twt", value="Links to specified twitter account", inline=False)
+    em2.add_field(name="fb", value="Searches for a person on Facebook", inline=False)
+    em2.add_field(name="githlp", value="Displays Help Menu for Github Commands", inline=False)
+    em2.add_field(name="btc", value="Displays the Current worth of BTC in USD", inline=False)
+    em2.add_field(name="suggestion", value="Send Your Suggestions to help make the bot better", inline=False)
+    em2.add_field(name="aes", value="Generates a random ａｅｓｔｈｅｔｉｃ image", inline=False)
+    em2.add_field(name="yums", value="Generates a random ａｅｓｔｈｅｔｉｃ food image", inline=False)
+    em2.add_field(name="finger", value="Grabs a users info")
+    em2.add_field(name="marry", value="marry your lover", inline=False)
+    em2.add_field(name="kill", value="kill someone", inline=False)
+    em2.add_field(name="punch", value="punch someone", inline=False)
+    em2.add_field(name="kiss", value="Kiss your lover", inline=False)
+    em2.add_field(name="fuckoff", value="Tell Someone to fuck off", inline=False)
+    em2.add_field(name="clear", value="Clears the bots messages")
+    em2.add_field(name="fuck", value=":smirk:", inline=False)
+    em2.add_field(name="adv", value="Gives Random Bits Advice", inline=False)
+    await client.say(ctx.message.author, embed=em2)
 #################
 # B I T C O I N #
 #################
 @client.command()
 async def btc():
     url = 'https://api.coindesk.com/v1/bpi/currentprice/BTC.json'
-    async with aiohttp.ClientSession() as session:  # Async HTTP request
+    async with aiohttp.ClientSession() as session:
         raw_response = await session.get(url)
         response = await raw_response.text()
         response = json.loads(response)
         await client.say("Bitcoin price is: $" + response['bpi']['USD']['rate'])
-
-#Searches a Phone Number
-@client.command(pass_context=True)
-async def cnam(ctx, arg1):
-    url = "http://apilayer.net/api/validate?access_key="+config['key']+"&number="+arg1+"&country_code=&format=1"
-    if ctx.message.author == config['admin']:
-        async with aiohttp.ClientSession() as session:
-            raw_response = await session.get(url)
-            response = await raw_response.text()
-            response = json.loads(response)
-            await client.say("Carrier: " + response['carrier'] + "\nLine Type: " + response['line_type']+"\nNumber:" +response['number'])
-    else:
-        await client.say("[!]User ID does not match")
-
-##########################
+####################
+# I M A G E   G E N#
+####################
 @client.command(pass_context=True)
 async def aes(ctx):
     inbed = discord.Embed(
         colour=discord.Colour.purple()
     )
-    inbed.set_image(url=random.choice(config['aes']))
+    inbed.set_image(url=random.choice(tuple(config['aes'])))
     await client.say(embed=inbed)
     await client.delete_message(ctx.message)
 
@@ -465,7 +366,7 @@ async def yums(ctx):
     yummy = discord.Embed(
         colour=discord.Colour.dark_green()
     )
-    yummy.set_image(url=random.choice(config['yum']))
+    yummy.set_image(url=random.choice(tuple(config['yum'])))
     yummy.set_footer(text="images thanks to ***cami the marshmallow***")
     await client.say(embed=yummy)
     await client.delete_message(ctx.message)
@@ -478,12 +379,15 @@ async def invite(ctx):
 @client.command(pass_context=True)
 async def punch(ctx, member: discord.Member):
     if member.mention == ctx.message.author.mention:
-        await client.say("{} {}".format(ctx.author.mention, config['punch']))
+        pnc = discord.Embed(
+          colour=discord.Colour.blue()
+        )
+        pnc.set_image(url=config['punch'])
+        await client.say(ctx.message.author.mention, embed=pnc)
         await client.delete_message(ctx.message)
     else:
         await client.say("{} got knocked the fuck out by {}".format(member.mention, ctx.message.author.mention))
     await client.delete_message(ctx.message)
-
 #User Kills another user
 @client.command(pass_context=True)
 async def kill(ctx, member: discord.Member):
@@ -498,7 +402,6 @@ async def kill(ctx, member: discord.Member):
 async def kiss(ctx, member: discord.Member):
     await client.say("{} was kissed by {}".format(member.mention, ctx.message.author.mention))
     await client.delete_message(ctx.message)
-
 #Self-Explanatory
 @client.command(pass_context=True)
 async def fuckoff(ctx, member: discord.Member):
@@ -508,7 +411,6 @@ async def fuckoff(ctx, member: discord.Member):
     else:
         await client.say("Yo,{}, {} says to fuck off".format(member.mention, ctx.message.author.mention))
     await client.delete_message(ctx.message)
-
 #Self-Explanatory
 @client.command(pass_context=True)
 async def fuck(ctx, member: discord.Member):
@@ -518,7 +420,6 @@ async def fuck(ctx, member: discord.Member):
     else:
         await client.say("{} got their pussy filled, screws loosened, and filled with cum by {}, the sex god".format(member.mention, ctx.message.author.mention))
     await client.delete_message(ctx.message)
-
 #Users can marry other users
 client.marriage_active = False
 @client.command(pass_context=True)
@@ -536,11 +437,10 @@ async def marry(ctx, member: discord.Member):
         await client.say("Too bad, you lose man", embed=mg)
     else:
         await client.say("Mazel Tov!")
-        
 #User can clear bots message
     client.marriage_active = False
 @client.command(pass_context=True)
-async def clr(ctx):
+async def clear(ctx):
     async for msg in client.logs_from(ctx.message.channel):
         if msg.author.id == client.user.id:
             try:
@@ -548,7 +448,50 @@ async def clr(ctx):
             except:
                 pass
     embed = discord.Embed(description="Action completed! :smile:", color=0x00ff00)
-    await client.delete_message(ctx.message)
     await client.say (embed=embed)
+    await client.delete_message(ctx.message)
+
+#Grabs a Users Info
+@client.command(pass_context=True)
+async def finger(ctx, user: discord.Member = None):
+    if user == None:
+        user = ctx.message.author
+    roles = [r.name for r in user.roles if r.name != "@everyone"]
+    if roles:
+        roles = sorted(roles, key=[x.name for x in ctx.message.server.role_hierarchy if x.name != "@everyone"].index)
+    else:
+        roles = "None"
+    print(len(roles))
+    if len(roles) > 16:
+        roles = "Too much damage to show."
+    else:
+        roles = "   ".join(roles)
+    fg = discord.Embed(description="finger {} :".format(
+        ctx.message.author.mention), title="User Info", color=0X008CFF)
+    if user.avatar_url:
+        fg.set_thumbnail(url=user.avatar_url)
+    else:
+        fg.set_thumbnail(url=user.default_avatar_url)
+    fg.add_field(name="User", value=user.name)
+    fg.add_field(name="Discrim", value=user.discriminator)
+    if user.nick:
+        fg.add_field(name="Nick", value=user.nick)
+    else:
+        fg.add_field(name="Nick", value="None")
+    fg.add_field(name="UserID", value=user.id)
+    fg.add_field(name="Stats", value=user.status)
+    if user.game:
+        fg.add_field(name="Currently Playing", value=user.game)
+    else:
+        fg.add_field(name="Currently Playing", value="Nothing")
+    fg.add_field(name="AFK?", value=user.is_afk)
+    fg.add_field(name="Bot?", value=user.bot)
+    fg.add_field(name="Muted in the server?", value=user.mute)
+    fg.add_field(name="Deafened in the server?", value=user.deaf)
+    fg.add_field(name="Joined Discord On", value=user.created_at.strftime("%d %b %Y %H:%M"))
+    fg.add_field(name="Joined Server On", value=user.joined_at.strftime("%d %b %Y %H:%M"))
+    fg.add_field(name="Highest role color", value=user.color)
+    fg.add_field(name="Roles", value=roles)
+    await client.say(embed=fg)
 
 client.run(config['token'])
