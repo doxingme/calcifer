@@ -146,7 +146,10 @@ async def ud(*args):
   word = ' '.join(args)
   r = requests.get("http://www.urbandictionary.com/define.php?term={}".format(word))
   soup = BeautifulSoup(r.content, features="html.parser")
-  await client.say(soup.find("div",attrs={"class":"meaning"}).text)
+  x = soup.find("div",attrs={"class":"meaning"}).text
+  y = ("*"+x+"*")
+  await client.say(y)
+    
 #This Command searches for a term using the DuckDuckGo search engine.
 @client.command(pass_context=True, aliases=['duckduckgo'])
 async def ddg(ctx, *args):
