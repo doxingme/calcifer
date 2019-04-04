@@ -2,15 +2,14 @@
 #Calcifer is suppose to be a more advanced version of Ein
 #Use the above code format to de-clutter Calcifers code and dont print things line by line
 import random
-import time
 import json
-import os
+import requests
 import aiohttp
 import discord
 from discord import Game, Embed, Color, Status, ChannelType
-from discord.ext.commands import Bot
 from discord.ext import commands
-
+from discord.ext.commands import Bot
+from bs4 import BeautifulSoup
 with open("config.json","r") as h:
     config = json.load(h)
 
@@ -142,14 +141,12 @@ async def yt(ctx, *args):
         await client.say(embed=Embed(description="**[Youtube Search](%s)**" % url, color=Color.gold()))
     await client.delete_message(ctx.message)
 
-#This command searches for a term on UrbanDictionary
-@client.command(pass_context=True, aliases=['urbandictionary'])
-async def ud(ctx, *args):
-    if args:
-        url = "http://urbandictionary.com/define.php?term=" + "+".join(args)
-        await client.say(embed=Embed(description="**[Urban Dictionary!](%s)**" % url, color=Color.gold()))
-    await client.delete_message(ctx.message)
-
+@client.command(aliases=['urba'])
+async def ud(*args):
+  word = ' '.join(args)
+  r = requests.get("http://www.urbandictionary.com/define.php?term={}".format(word))
+  soup = BeautifulSoup(r.content, features="html.parser")
+  await client.say(soup.find("div",attrs={"class":"meaning"}).text)
 #This Command searches for a term using the DuckDuckGo search engine.
 @client.command(pass_context=True, aliases=['duckduckgo'])
 async def ddg(ctx, *args):
@@ -225,37 +222,7 @@ async def fq(ctx, *args):
 #~~~~~~~~~~~~~~~~~~~#
 # NSFW Image Search #
 #~~~~~~~~~~~~~~~~~~~#
-#These are for NSFW Image boards.
-###############
-# G I T H U B #
-###############
-# These Commands are for generating Github links.
 
-#This command acts as a help menu for the Github user commands
-@client.command(pass_context=True)
-async def githlp(ctx):
-    gt = discord.Embed(
-        colour = discord.Colour.teal()
-    )
-    gt.add_field(name="git", value="This command is to link to a specific account or repository.  EX: `git rootmeskids ponyo` or `git rootmeskids`", inline=False)
-    gt.add_field(name="gitr", value="This command links to the raw version of a file within a repository. EX: `gitr rootmeskids ponyo master p.py` or ` aikaterna Marry-Cog master marry marry.py`", inline=False)
-    await client.send_message(ctx.message.author, embed=gt)
-
-#This command generates a link. This command is for users to quickly and easily link to their github pages
-@client.command(pass_context=True, aliases=['github'])
-async def git(ctx, *args):
-    if args:
-        url = "http://github.com/" + "/".join(args)
-        await client.say(embed=Embed(description="**[Github User](%s)**" % url, color=Color.gold()))
-    await client.delete_message(ctx.message)
-
-#This Creates a link to a raw version of the specified accounts repository file
-@client.command(pass_context=True, aliases=['gitraw'])
-async def gitr(ctx, *args):
-    if args:
-        url = "https://raw.githubusercontent.com/" + "/".join(args)
-        await client.say(embed=Embed(description="**[Github Raw](%s)**" % url, color=Color.gold()))
-    await client.delete_message(ctx.message)
 ###########
 # H E L P #
 ###########
@@ -271,9 +238,9 @@ async def help(ctx):
     em.add_field(name="iwanttobe", value="What do you want be...:thinking:", inline=False)
     em.add_field(name="gowhere", value="WHERE DO WE GO?!?!?!?", inline=False)
     em.add_field(name="havenofear", value="WHO CAN IT BE?!?!?!?!", inline=False)
-    em.add_field(name="embd", value="Embeds your text", inline=False)
+    em.add_field(name="embd", value="Embeds given text", inline=False)
     em.add_field(name="lmgtfy", value="Generates a lmgtfy link", inline=False)
-    em.add_field(name="srchip", value="Searches for an IP address", inline=False)
+    em.add_field(name="srchip", value="Searches for given IP address", inline=False)
     em.add_field(name="cgl", value="Searches Craigslist", inline=False)
     em.add_field(name="gl", value="Searches using the Google search engine", inline=False)
     em.add_field(name="locate", value="Creates Link to map of specified location ")
@@ -282,6 +249,30 @@ async def help(ctx):
     em.set_footer(text="For more commands type `help2` and for nsfw commands type `nsfw`")
     await client.say(ctx.message.author, embed=em)
 
+#Continuation of help
+@client.command(pass_context=True)
+async def help2(ctx):
+    em2 = discord.Embed(
+        colour=discord.Colour.teal()
+    )
+    em2.set_author(name="Help continued...")
+    em2.add_field(name="ddg", value="Searches using the DuckDuckGo search engine", inline=False)
+    em2.add_field(name="twt", value="Links to specified twitter account", inline=False)
+    em2.add_field(name="fb", value="Searches for a person on Facebook", inline=False)
+    em2.add_field(name="btc", value="Displays the Current worth of BTC in USD", inline=False)
+    em2.add_field(name="suggestion", value="Send Your Suggestions to help make the bot better", inline=False)
+    em2.add_field(name="aes", value="Generates a random ａｅｓｔｈｅｔｉｃ image", inline=False)
+    em2.add_field(name="yums", value="Generates a random ａｅｓｔｈｅｔｉｃ food image", inline=False)
+    em2.add_field(name="finger", value="Displays given users info")
+    em2.add_field(name="marry", value="marry your lover", inline=False)
+    em2.add_field(name="kill", value="kill someone", inline=False)
+    em2.add_field(name="punch", value="punch someone", inline=False)
+    em2.add_field(name="kiss", value="Kiss your lover", inline=False)
+    em2.add_field(name="fuckoff", value="Tell Someone to fuck off", inline=False)
+    em2.add_field(name="clear", value="Clears the bots messages")
+    em2.add_field(name="fuck", value=":smirk:", inline=False)
+    em2.add_field(name="adv", value="Gives Random Bits Advice", inline=False)
+    await client.say(ctx.message.author, embed=em2)
 
 @client.command(pass_context=True)
 async def adv(ctx):
@@ -311,32 +302,6 @@ async def suggestion(ctx, *args):
     suggestionsFile.write(text + "\n")
     msg = "{0.author.mention} Added your suggestion! It will be processed and may be added soon! Thanks for the help!".format(ctx)
     await client.say(msg)
-
-#Continuation of ./hlp
-@client.command(pass_context=True)
-async def help2(ctx):
-    em2 = discord.Embed(
-        colour=discord.Colour.teal()
-    )
-    em2.set_author(name="Help continued...")
-    em2.add_field(name="ddg", value="Searches using the DuckDuckGo search engine", inline=False)
-    em2.add_field(name="twt", value="Links to specified twitter account", inline=False)
-    em2.add_field(name="fb", value="Searches for a person on Facebook", inline=False)
-    em2.add_field(name="githlp", value="Displays Help Menu for Github Commands", inline=False)
-    em2.add_field(name="btc", value="Displays the Current worth of BTC in USD", inline=False)
-    em2.add_field(name="suggestion", value="Send Your Suggestions to help make the bot better", inline=False)
-    em2.add_field(name="aes", value="Generates a random ａｅｓｔｈｅｔｉｃ image", inline=False)
-    em2.add_field(name="yums", value="Generates a random ａｅｓｔｈｅｔｉｃ food image", inline=False)
-    em2.add_field(name="finger", value="Grabs a users info")
-    em2.add_field(name="marry", value="marry your lover", inline=False)
-    em2.add_field(name="kill", value="kill someone", inline=False)
-    em2.add_field(name="punch", value="punch someone", inline=False)
-    em2.add_field(name="kiss", value="Kiss your lover", inline=False)
-    em2.add_field(name="fuckoff", value="Tell Someone to fuck off", inline=False)
-    em2.add_field(name="clear", value="Clears the bots messages")
-    em2.add_field(name="fuck", value=":smirk:", inline=False)
-    em2.add_field(name="adv", value="Gives Random Bits Advice", inline=False)
-    await client.say(ctx.message.author, embed=em2)
 #################
 # B I T C O I N #
 #################
@@ -370,10 +335,6 @@ async def yums(ctx):
     yummy.set_footer(text="images thanks to ***cami the marshmallow***")
     await client.say(embed=yummy)
     await client.delete_message(ctx.message)
-
-@client.command(pass_context=True)
-async def invite(ctx):
-    await client.say(embed=Embed(description="**[INVITE MEEE](%s)**" % config['url'], color=Color.lighter_grey()))
 
 #Users Punch Other users
 @client.command(pass_context=True)
@@ -463,7 +424,7 @@ async def finger(ctx, user: discord.Member = None):
         roles = "None"
     print(len(roles))
     if len(roles) > 16:
-        roles = "Too much damage to show."
+        roles = "Too much info to show."
     else:
         roles = "   ".join(roles)
     fg = discord.Embed(description="finger {} :".format(
