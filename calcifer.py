@@ -21,8 +21,7 @@ client.remove_command('help')
 ##################################################
 #8ball  #User-Response  #Link-Generators  #Help
 #Square #Funny          #NSFW
-#Ping   #Misc           #Github
-
+#Ping   #Misc      
 
 ####SQUARE(math)####
 @client.command()
@@ -35,23 +34,14 @@ async def marco(ctx):
     t = await client.say('Polo!')
     ms = (t.timestamp-ctx.message.timestamp).total_seconds() * 1000
     await client.edit_message(t, new_content='Polo! It took me {}ms to recieve that but other than that it seems the castle is up and running :smile: :fire:'.format(int(ms)))
-############################
-# U S E R - R E S P O N S E#
-############################
-@client.command(pass_context=True)
-async def iwanttobe(context):
-    await client.say(context.message.author.mention+" Wants to be the very best like no one ever was")
-#
-@client.command(pass_context=True)
-async def gowhere(context):
-    await client.say(context.message.author.mention+"You must go......𝑷𝑳𝑼𝑺 𝑼𝑳𝑻𝑹𝑨!!!!!")
+
 #############
 # F U N N Y #
 #############
 @client.command(pass_context=True)
-async def havenofear(ctx):
+async def saveme(ctx):
     am = discord.Embed(
-        description="***CAUSE I AM HERE***"
+        description="***HAVE NO FEAR!!!! CAUSE I AM HERE***"
     )
     am.set_image(url="https://i.postimg.cc/FR5mp59P/tumblr-p5e5peklin1sam3zlo1-500.png")
     await client.say(embed=am)
@@ -117,17 +107,9 @@ async def srchip(ctx, *args):
 #These Commands are for making it easy to browse the web using their favorite search engine from the comfort of Discord
 #The commands even allow for users to search social media platforms from Discord
 
-#This comand searches for items on craiglist
-@client.command(pass_context=True, aliases=['craiglist'])
-async def cgl(ctx, *args):
-    if args:
-        url = "https://craigslist.org/search/sss?query=" + "+".join(args)
-        await client.say(embed=Embed(description="**[Craigslist](%s)**" % url, color=Color.dark_magenta()))
-    await client.delete_message(ctx.message)
-
 #This command searches for a term using the Google search engine
 @client.command(pass_context=True, aliases=['alphabet'])
-async def gl(ctx, *args):
+async def g(ctx, *args):
     if args:
         url = "https://www.google.com/search?q=" + "+".join(args)
         await client.say(embed=Embed(description="**[Google Search](%s)**" % url, color=Color.gold()))
@@ -149,15 +131,6 @@ async def ud(*args):
   x = soup.find("div",attrs={"class":"meaning"}).text
   y = ("*"+x+"*")
   await client.say(y)
-    
-#This Command searches for a term using the DuckDuckGo search engine.
-@client.command(pass_context=True, aliases=['duckduckgo'])
-async def ddg(ctx, *args):
-    if args:
-        url = "http://duckduckgo.com/?q=" + "+".join(args)
-        await client.say(embed=Embed(description="**[DuckDuckGo Search](%s)**" % url, color=Color.orange()))
-    await client.delete_message(ctx.message)
-
 #~~~~~~~~~~~~~~~~~~~~~#
 # Social Media Search #
 #~~~~~~~~~~~~~~~~~~~~~#
@@ -167,7 +140,7 @@ async def ddg(ctx, *args):
 async def twt(ctx, *args):
     if args:
         url = "https://www.twitter.com/" + "+".join(args)
-        await client.say(embed=Embed(description="**[Youtube Search](%s)**" % url, color=Color.gold()))
+        await client.say(embed=Embed(description="**[Twitter Search](%s)**" % url, color=Color.gold()))
     await client.delete_message(ctx.message)
 
 #Searches Google Maps
@@ -222,10 +195,6 @@ async def fq(ctx, *args):
         url = "https://www.fuq.com/search/" + "%20".join(args)
         await client.say(embed=Embed(description="**[Fuq](%s)**" % url, color=Color.lighter_grey()))
     await client.delete_message(ctx.message)
-#~~~~~~~~~~~~~~~~~~~#
-# NSFW Image Search #
-#~~~~~~~~~~~~~~~~~~~#
-
 ###########
 # H E L P #
 ###########
@@ -238,17 +207,15 @@ async def help(ctx):
     em.set_author(name="Help")
     em.add_field(name="square", value="Squares a number", inline=False)
     em.add_field(name="marco", value="Polo!!!", inline=False)
-    em.add_field(name="iwanttobe", value="What do you want be...:thinking:", inline=False)
-    em.add_field(name="gowhere", value="WHERE DO WE GO?!?!?!?", inline=False)
-    em.add_field(name="havenofear", value="WHO CAN IT BE?!?!?!?!", inline=False)
+    em.add_field(name="saveme", value="WHO CAN IT BE?!?!?!?!", inline=False)
     em.add_field(name="embd", value="Embeds given text", inline=False)
     em.add_field(name="lmgtfy", value="Generates a lmgtfy link", inline=False)
     em.add_field(name="srchip", value="Searches for given IP address", inline=False)
-    em.add_field(name="cgl", value="Searches Craigslist", inline=False)
-    em.add_field(name="gl", value="Searches using the Google search engine", inline=False)
-    em.add_field(name="locate", value="Creates Link to map of specified location ")
+    em.add_field(name="g", value="Searches using the Google search engine", inline=False)
+    em.add_field(name="zr", value="DO A BARREL ROLL", inline=False)
+    em.add_field(name="locate", value="Creates Link to map of specified location", inline=False)
     em.add_field(name="yt", value="Searches YouTube", inline=False)
-    em.add_field(name="ud", value="Searches UrbanDictionary", inline=False)
+    em.add_field(name="ud", value="Searches Urban Dictionary", inline=False)
     em.set_footer(text="For more commands type `help2` and for nsfw commands type `nsfw`")
     await client.say(ctx.message.author, embed=em)
 
@@ -259,10 +226,8 @@ async def help2(ctx):
         colour=discord.Colour.teal()
     )
     em2.set_author(name="Help continued...")
-    em2.add_field(name="ddg", value="Searches using the DuckDuckGo search engine", inline=False)
     em2.add_field(name="twt", value="Links to specified twitter account", inline=False)
     em2.add_field(name="fb", value="Searches for a person on Facebook", inline=False)
-    em2.add_field(name="btc", value="Displays the Current worth of BTC in USD", inline=False)
     em2.add_field(name="suggestion", value="Send Your Suggestions to help make the bot better", inline=False)
     em2.add_field(name="aes", value="Generates a random ａｅｓｔｈｅｔｉｃ image", inline=False)
     em2.add_field(name="yums", value="Generates a random ａｅｓｔｈｅｔｉｃ food image", inline=False)
@@ -271,17 +236,10 @@ async def help2(ctx):
     em2.add_field(name="kill", value="kill someone", inline=False)
     em2.add_field(name="punch", value="punch someone", inline=False)
     em2.add_field(name="kiss", value="Kiss your lover", inline=False)
-    em2.add_field(name="fuckoff", value="Tell Someone to fuck off", inline=False)
     em2.add_field(name="clear", value="Clears the bots messages")
     em2.add_field(name="fuck", value=":smirk:", inline=False)
     em2.add_field(name="adv", value="Gives Random Bits Advice", inline=False)
     await client.say(ctx.message.author, embed=em2)
-
-@client.command(pass_context=True)
-async def adv(ctx):
-  await client.say(random.choice(tuple(config['advice'])))
-  await client.delete_message(ctx.message)
-
 
 #Nsfw Command Help
 @client.command(pass_context=True)
@@ -305,20 +263,14 @@ async def suggestion(ctx, *args):
     suggestionsFile.write(text + "\n")
     msg = "{0.author.mention} Added your suggestion! It will be processed and may be added soon! Thanks for the help!".format(ctx)
     await client.say(msg)
-#################
-# B I T C O I N #
-#################
-@client.command()
-async def btc():
-    url = 'https://api.coindesk.com/v1/bpi/currentprice/BTC.json'
-    async with aiohttp.ClientSession() as session:
-        raw_response = await session.get(url)
-        response = await raw_response.text()
-        response = json.loads(response)
-        await client.say("Bitcoin price is: $" + response['bpi']['USD']['rate'])
 ####################
 # I M A G E   G E N#
 ####################
+@client.command(pass_context=True)
+async def adv(ctx):
+  await client.say(random.choice(tuple(config['advice'])))
+  await client.delete_message(ctx.message)
+
 @client.command(pass_context=True)
 async def aes(ctx):
     inbed = discord.Embed(
@@ -368,15 +320,6 @@ async def kiss(ctx, member: discord.Member):
     await client.delete_message(ctx.message)
 #Self-Explanatory
 @client.command(pass_context=True)
-async def fuckoff(ctx, member: discord.Member):
-    if member.mention == ctx.message.author.mention:
-        await client.say("You cant really tell yourself to fuckoff")
-        await client.delete_message(ctx.message)
-    else:
-        await client.say("Yo,{}, {} says to fuck off".format(member.mention, ctx.message.author.mention))
-    await client.delete_message(ctx.message)
-#Self-Explanatory
-@client.command(pass_context=True)
 async def fuck(ctx, member: discord.Member):
     if member.mention == ctx.message.author.mention:
         await client.say("You cant fuck yourself...your dicks too small")
@@ -411,7 +354,7 @@ async def clear(ctx):
                 await client.delete_message (msg)
             except:
                 pass
-    embed = discord.Embed(description="Action completed! :smile:", color=0x00ff00)
+    embed = discord.Embed(description="Chat Cleaned! :fire:", color=0x00ff00)
     await client.say (embed=embed)
     await client.delete_message(ctx.message)
 
